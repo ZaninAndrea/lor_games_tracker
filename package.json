@@ -1,0 +1,21 @@
+{
+    "name": "lor-tracker",
+    "version": "1.0.0",
+    "description": "",
+    "main": "record.js",
+    "dependencies": {
+        "create-nodew-exe": "^1.0.5",
+        "isomorphic-fetch": "^2.2.1",
+        "paktc": "^1.0.1",
+        "pkg": "^4.4.2",
+        "runeterra": "^0.0.7",
+        "user-home": "^2.0.0"
+    },
+    "devDependencies": {},
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "build": "pkg record.js && create-nodew-exe record-win.exe lor-tracker.exe"
+    },
+    "author": "",
+    "license": "ISC"
+}
