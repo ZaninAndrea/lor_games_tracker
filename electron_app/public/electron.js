@@ -1,10 +1,18 @@
-const { app, BrowserWindow, ipcMain } = require("electron")
+const { app, BrowserWindow, ipcMain, Menu, Tray } = require("electron")
 const path = require("path")
 const isDev = require("electron-is-dev")
 const { getData, getDeckMap } = require("./data.js")
 const { recordGames } = require("./record.js")
-
+const AutoLaunch = require("auto-launch")
 const { autoUpdater } = require("electron-updater")
+
+if (!isDev) {
+    var autoLauncher = new AutoLaunch({
+        name: "Legends of Runeterra Game Tracker",
+    })
+
+    autoLauncher.enable()
+}
 
 let mainWindow
 
@@ -20,40 +28,51 @@ function createWindow() {
         isDev
             ? "http://localhost:3000"
             : `file://${path.join(__dirname, "../build/index.html")}`
-    ) // load the react app
-    mainWindow.on("closed", () => (mainWindow = null))
+    )
+    mainWindow.on("closed", e => {
+        mainWindow = null
+    })
+
+    if (!isDev) {
+        mainWindow.setMenuBarVisibility(false)
+    }
 }
 
-// when the app is loaded create a BrowserWindow and check for updates
+let tray = null
+let shouldUpdate = false
 app.on("ready", function() {
-    createWindow()
+    tray = new Tray(path.join(__dirname, "./icon.ico"))
+    const contextMenu = Menu.buildFromTemplate([
+        {
+            label: "exit",
+            click: () =>
+                shouldUpdate ? autoUpdater.quitAndInstall() : app.quit(),
+        },
+    ])
+    tray.setToolTip("Legends of Runeterra Game Tracker")
+    tray.setContextMenu(contextMenu)
+    tray.on("click", () => {
+        if (!mainWindow) createWindow()
+    })
+
+    // createWindow()
     if (!isDev) autoUpdater.checkForUpdates()
 })
 
-let shouldUpdate = false
-// on MacOS leave process running also with no windows
 app.on("window-all-closed", () => {
-    if (process.platform !== "darwin") {
-        if (!shouldUpdate) {
-            app.quit()
-        } else {
-            autoUpdater.quitAndInstall()
-        }
-    }
-})
-
-// if there are no windows create one
-app.on("activate", () => {
-    if (mainWindow === null) {
-        createWindow()
-    }
+    // catch the event to override the default behaviour
+    // of closing the app
 })
 
 function onNewGame(newGame) {
-    mainWindow.webContents.send("newGame", newGame)
+    if (mainWindow) {
+        mainWindow.webContents.send("newGame", newGame)
+    }
 }
 function onLorOpenChange(lorOpen) {
-    mainWindow.webContents.send("lorOpen", lorOpen)
+    if (mainWindow) {
+        mainWindow.webContents.send("lorOpen", lorOpen)
+    }
 }
 
 recordGames(onNewGame, onLorOpenChange).catch(e => {

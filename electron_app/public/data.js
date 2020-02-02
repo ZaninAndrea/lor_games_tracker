@@ -28,10 +28,18 @@ function getDeckMap() {
 }
 
 function getData() {
+    if (!fs.existsSync(GAMES_LOG)) {
+        fs.writeFileSync(
+            GAMES_LOG,
+            "won,timestamp,deckCode,gameDuration,playerName,opponentName\n"
+        )
+        return []
+    }
+
     const data = fs.readFileSync(GAMES_LOG, "utf8")
     const lines = data.split("\n").slice(1, -1)
 
-    const matches = lines.map(line => {
+    let matches = lines.map(line => {
         const [
             won,
             timestamp,
@@ -51,7 +59,7 @@ function getData() {
         }
     })
 
-    return matches
+    return matches.reverse()
 }
 
 function getDeckAggregates(matches) {

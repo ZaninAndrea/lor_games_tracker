@@ -1,6 +1,6 @@
 import React, { Component } from "react"
 import RegionIcon from "./RegionIcon"
-import { DeckEncoder } from "runeterra"
+import { DeckEncoder } from "./runeterra/index.js"
 import cardDatabase from "../cardDatabase"
 import TimeAgo from "timeago-react"
 
