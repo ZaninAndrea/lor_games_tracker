@@ -1,0 +1,73 @@
+* {
+    font-family: "Montserrat", sans-serif;
+    box-sizing: border-box;
+}
+
+.regionIcon {
+    width: 35px;
+}
+
+.gameResult {
+    width: 100%;
+    border-radius: 6px;
+    margin: 12px auto;
+    max-width: 900px;
+}
+
+.gameResult.gameWon {
+    background-image: linear-gradient(
+        to right,
+        rgba(97, 152, 164, 1),
+        rgba(49, 41, 85, 1)
+    );
+    box-shadow: 2px 2px 3px 2px rgba(0, 0, 0, 0.3);
+}
+.gameResult.gameLost {
+    background-image: linear-gradient(
+        to right,
+        rgba(201, 103, 143, 0.7),
+        rgba(49, 41, 85, 0.9)
+    );
+    box-shadow: 2px 2px 3px 2px rgba(0, 0, 0, 0.3);
+}
+
+.gameResult-header {
+    width: 100%;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 8px;
+}
+.gameResult-body {
+    width: 100%;
+    padding: 8px;
+    height: 64px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.gameResult-players {
+    display: inline-block;
+    margin: 0 24px;
+    color: rgba(255, 255, 255, 0.7);
+}
+.gameResult-duration {
+    display: inline-block;
+    float: right;
+    margin-right: 24px;
+    color: rgba(255, 255, 255, 0.7);
+}
+.gameResult-factions {
+    margin-right: 9px;
+    margin-left: 24px;
+}
+.gameResult-deckName {
+    margin: 0 9px;
+    color: rgba(255, 255, 255, 0.9);
+}
+.gameResult-timeago {
+    margin-left: auto;
+    margin-right: 24px;
+    color: rgba(255, 255, 255, 0.7);
+}

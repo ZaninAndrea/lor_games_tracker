@@ -9,7 +9,13 @@ const { autoUpdater } = require("electron-updater")
 let mainWindow
 
 function createWindow() {
-    mainWindow = new BrowserWindow({ width: 900, height: 680 })
+    mainWindow = new BrowserWindow({
+        width: 900,
+        height: 680,
+        webPreferences: {
+            nodeIntegration: true,
+        },
+    })
     mainWindow.loadURL(
         isDev
             ? "http://localhost:3000"
@@ -24,10 +30,15 @@ app.on("ready", function() {
     if (!isDev) autoUpdater.checkForUpdates()
 })
 
+let shouldUpdate = false
 // on MacOS leave process running also with no windows
 app.on("window-all-closed", () => {
     if (process.platform !== "darwin") {
-        app.quit()
+        if (!shouldUpdate) {
+            app.quit()
+        } else {
+            autoUpdater.quitAndInstall()
+        }
     }
 })
 
@@ -60,7 +71,6 @@ ipcMain.on("requestUserData", (event, arg) => {
     mainWindow.webContents.send("deckMap", getDeckMap())
 })
 
-// when receiving a quitAndInstall signal, quit and install the new version ;)
 ipcMain.on("quitAndInstall", (event, arg) => {
-    autoUpdater.quitAndInstall()
+    shouldUpdate = true
 })

@@ -1,11 +1,11 @@
 {
     "name": "lor_tracker",
-    "version": "0.1.0",
+    "version": "0.1.3",
     "author": "ZaninAndrea",
     "homepage": "./",
     "description": "Legends of Runeterra game tracker",
     "main": "public/electron.js",
-    "repository": "https://github.com/ZaninAndrea/electron_app",
+    "repository": "https://github.com/ZaninAndrea/lor_games_tracker",
     "build": {
         "appId": "com.lor_tracker",
         "files": [
@@ -24,6 +24,7 @@
         "react-dom": "^15.6.1",
         "react-scripts": "1.0.10",
         "runeterra": "0.0.7",
+        "timeago-react": "^3.0.0",
         "user-home": "^2.0.0"
     },
     "lint-staged": {

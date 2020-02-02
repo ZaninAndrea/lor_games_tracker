@@ -1,18 +1,9 @@
 import React, { Component } from "react"
+import "./main.css"
+import MatchResult from "./components/MatchResult"
 
 const electron = window.require("electron") // little trick to import electron in react
 const ipcRenderer = electron.ipcRenderer
-
-function secondsToString(seconds) {
-    var numminutes = Math.floor(seconds / 60)
-    var numseconds = seconds % 60
-
-    return numminutes + "m " + numseconds + "s"
-}
-
-function deckCodeToName(code, deckMap) {
-    return deckMap[code] || code.slice(0, 5) + "..." + code.slice(-5)
-}
 
 class App extends Component {
     constructor(props) {
@@ -43,38 +34,28 @@ class App extends Component {
     render() {
         return (
             <div>
-                Games summary {this.state.lorOpen ? "online" : "offline"}
+                Games summary <b>{this.state.lorOpen ? "online" : "offline"}</b>
                 <br />
-                <table>
-                    <tr>
-                        <th>Result</th>
-                        <th>Opponent</th>
-                        <th>Deck</th>
-                        <th>Duration</th>
-                    </tr>
-                    {this.state.matches.map(
-                        ({
-                            won,
-                            timestamp,
-                            deckCode,
-                            gameDuration,
-                            playerName,
-                            opponentName,
-                        }) => (
-                            <tr>
-                                <td>{won ? "win" : "lose"}</td>
-                                <td>{opponentName}</td>
-                                <td>
-                                    {deckCodeToName(
-                                        deckCode,
-                                        this.state.deckMap
-                                    )}
-                                </td>
-                                <td>{secondsToString(gameDuration)}</td>
-                            </tr>
-                        )
-                    )}
-                </table>
+                {this.state.matches.map(
+                    ({
+                        won,
+                        timestamp,
+                        deckCode,
+                        gameDuration,
+                        playerName,
+                        opponentName,
+                    }) => (
+                        <MatchResult
+                            won={won}
+                            timestamp={timestamp}
+                            deckCode={deckCode}
+                            gameDuration={gameDuration}
+                            playerName={playerName}
+                            opponentName={opponentName}
+                            deckMap={this.state.deckMap}
+                        />
+                    )
+                )}
             </div>
         )
     }
